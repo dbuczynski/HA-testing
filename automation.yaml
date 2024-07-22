@@ -69,5 +69,5 @@ action:
             target:
               entity_id: input_text.test_alarm_control_output
             data:
-              value: "Cube has triggered this event: {{ trigger.event }}"
+              value: "OFF"
 mode: single
