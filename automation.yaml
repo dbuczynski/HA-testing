@@ -5,32 +5,32 @@ trigger:
     entity_id:
       - input_boolean.test_alarm_control_1
     to: "on"
-    id: Control 1 ON
+    id: "Czujka pierwsza wykryła ruch"
   - platform: state
     entity_id:
       - input_boolean.test_alarm_control_2
     to: "on"
-    id: Control 2 ON
+    id: "Czujka druga wykryła ruch"
   - platform: state
     entity_id:
       - input_boolean.test_alarm_control_3
     to: "on"
-    id: Control 3 ON
+    id: "Czujka trzecia wykryła ruch"
   - platform: state
     entity_id:
       - input_boolean.test_alarm_control_1
     to: "off"
-    id: Control 1 OFF
+    id: "Czujka pierwsza przestała wykrywać ruch"
   - platform: state
     entity_id:
       - input_boolean.test_alarm_control_2
     to: "off"
-    id: Control 2 OFF
+    id: "Czujka druga przestała wykrywać ruch"
   - platform: state
     entity_id:
       - input_boolean.test_alarm_control_3
     to: "off"
-    id: Control 3 OFF
+    id: "Czujka trzecia przestała wykrywać ruch"
 condition: []
 action:
   - choose:
@@ -39,35 +39,27 @@ action:
             conditions:
               - condition: trigger
                 id:
-                  - Control 1 ON
-              - condition: trigger
-                id:
-                  - Control 2 ON
-              - condition: trigger
-                id:
-                  - Control 3 ON
+                  - "Czujka pierwsza wykryła ruch"
+                  - "Czujka druga wykryła ruch"
+                  - "Czujka trzecia wykryła ruch"
         sequence:
           - service: input_text.set_value
             target:
               entity_id: input_text.test_alarm_control_output
             data:
-              value: "ON"
+              value: "{{ trigger.id }}"
       - conditions:
           - condition: or
             conditions:
               - condition: trigger
                 id:
-                  - Control 1 OFF
-              - condition: trigger
-                id:
-                  - Control 2 OFF
-              - condition: trigger
-                id:
-                  - Control 3 OFF
+                  - "Czujka pierwsza przestała wykrywać ruch"
+                  - "Czujka druga przestała wykrywać ruch"
+                  - "Czujka trzecia przestała wykrywać ruch"
         sequence:
           - service: input_text.set_value
             target:
               entity_id: input_text.test_alarm_control_output
             data:
-              value: "OFF"
+              value: "{{ trigger.id }}"
 mode: single
