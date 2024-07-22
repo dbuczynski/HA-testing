@@ -1,0 +1,73 @@
+alias: TESTING
+description: ""
+trigger:
+  - platform: state
+    entity_id:
+      - input_boolean.test_alarm_control_1
+    to: "on"
+    id: Control 1 ON
+  - platform: state
+    entity_id:
+      - input_boolean.test_alarm_control_2
+    to: "on"
+    id: Control 2 ON
+  - platform: state
+    entity_id:
+      - input_boolean.test_alarm_control_3
+    to: "on"
+    id: Control 3 ON
+  - platform: state
+    entity_id:
+      - input_boolean.test_alarm_control_1
+    to: "off"
+    id: Control 1 OFF
+  - platform: state
+    entity_id:
+      - input_boolean.test_alarm_control_2
+    to: "off"
+    id: Control 2 OFF
+  - platform: state
+    entity_id:
+      - input_boolean.test_alarm_control_3
+    to: "off"
+    id: Control 3 OFF
+condition: []
+action:
+  - choose:
+      - conditions:
+          - condition: or
+            conditions:
+              - condition: trigger
+                id:
+                  - Control 1 ON
+              - condition: trigger
+                id:
+                  - Control 2 ON
+              - condition: trigger
+                id:
+                  - Control 3 ON
+        sequence:
+          - service: input_text.set_value
+            target:
+              entity_id: input_text.test_alarm_control_output
+            data:
+              value: "ON"
+      - conditions:
+          - condition: or
+            conditions:
+              - condition: trigger
+                id:
+                  - Control 1 OFF
+              - condition: trigger
+                id:
+                  - Control 2 OFF
+              - condition: trigger
+                id:
+                  - Control 3 OFF
+        sequence:
+          - service: input_text.set_value
+            target:
+              entity_id: input_text.test_alarm_control_output
+            data:
+              value: "Cube has triggered this event: {{ trigger.event }}"
+mode: single
